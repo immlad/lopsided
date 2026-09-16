@@ -1,0 +1,91 @@
+import { useEffect, useRef, useState } from "react";
+import { nebuloTargets } from "@/lib/desktop/nebulo-links";
+
+export function NebuloApp({ initial }: { initial?: string }) {
+  const [targetId, setTargetId] = useState<string | null>(initial ?? null);
+  const [loading, setLoading] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement | null>(null);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || !targetId) return;
+    const target = nebuloTargets.find((t) => t.id === targetId);
+    if (!target) return;
+    setLoading(true);
+    // Assigned as a JS property after mount: nothing readable lands in markup.
+    const value = target.resolve();
+    const id = window.setTimeout(() => {
+      frame.setAttribute("data-session", targetId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (frame as any).src = value;
+    }, 30);
+    return () => window.clearTimeout(id);
+  }, [targetId]);
+
+  if (!targetId) {
+    return (
+      <div className="flex h-full flex-col gap-4 overflow-auto p-6">
+        <div>
+          <h2 className="text-lg font-semibold">Nebulo</h2>
+          <p className="text-sm opacity-70">Pick a workspace to open inside this window.</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {nebuloTargets.map((t) => (
+            <button key={t.id} className="tile" onClick={() => setTargetId(t.id)}>
+              <span className="tile-badge">{t.label.slice(-1)}</span>
+              <span className="flex flex-col items-start">
+                <span className="font-medium">{t.label}</span>
+                <span className="text-xs opacity-60">{t.hint}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex items-center gap-2 border-b border-[var(--glass-line)] px-3 py-2">
+        <select
+          className="pill"
+          value={targetId}
+          onChange={(e) => setTargetId(e.target.value)}
+          aria-label="Workspace"
+        >
+          {nebuloTargets.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.label}
+            </option>
+          ))}
+        </select>
+        <button
+          className="pill"
+          onClick={() => {
+            const f = frameRef.current;
+            if (f) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const s = (f as any).src;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (f as any).src = s;
+            }
+          }}
+        >
+          Reload
+        </button>
+        <span className="ml-auto text-xs opacity-60">{loading ? "Connecting…" : "Connected"}</span>
+      </div>
+      <div className="relative flex-1 bg-black/5">
+        <iframe
+          ref={frameRef}
+          title="Nebulo"
+          className="h-full w-full"
+          referrerPolicy="no-referrer"
+          loading="lazy"
+          onLoad={() => setLoading(false)}
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"
+        />
+      </div>
+    </div>
+  );
+}
