@@ -15,7 +15,7 @@ export function Desktop() {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.dataset.skin = settings.skin;
+    root.dataset["skin"] = settings.skin;
     root.classList.toggle("dark", settings.mode === "dark");
   }, [settings.skin, settings.mode]);
 
@@ -34,7 +34,7 @@ export function Desktop() {
             {win.appId === "about" && <AboutApp />}
             {win.appId === "nebulo" && <NebuloApp />}
             {win.appId === "games" &&
-              (win.payload?.url ? <GameFrame url={win.payload.url} /> : <GamesApp />)}
+              (win.payload?.["url"] ? <GameFrame url={win.payload["url"]} /> : <GamesApp />)}
           </Window>
         ))}
       </main>

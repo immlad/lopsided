@@ -29,5 +29,5 @@ export const wallpapers: Wallpaper[] = [
 ];
 
 export function wallpaperById(id: string) {
-  return wallpapers.find((w) => w.id === id) ?? wallpapers[0];
+  return wallpapers.find((w) => w.id === id) ?? wallpapers[0]!;
 }

@@ -25,7 +25,7 @@ export type WindowState = {
   z: number;
   minimized: boolean;
   hidden: boolean;
-  payload?: Record<string, string>;
+  payload?: Record<string, string> | undefined;
 };
 
 type Settings = {
@@ -41,10 +41,10 @@ type DesktopValue = {
   openWindow: (opts: {
     appId: AppId;
     title: string;
-    w?: number;
-    h?: number;
-    payload?: Record<string, string>;
-    singleton?: boolean;
+    w?: number | undefined;
+    h?: number | undefined;
+    payload?: Record<string, string> | undefined;
+    singleton?: boolean | undefined;
   }) => void;
   close: (id: string) => void;
   minimize: (id: string) => void;
