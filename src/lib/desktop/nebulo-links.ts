@@ -19,10 +19,20 @@ function dec(packed: string): string {
 export type NebuloTarget = { id: string; label: string; hint: string; resolve: () => string };
 
 const packed = [
-  { id: "n1", label: "Workspace One", hint: "Primary node", p: "Jz8jNTsvL39zJydvNjA6Lyk3L2Q0IyM/Iw==" },
-  { id: "n2", label: "Workspace Two", hint: "Mirror node", p: "Jz8jNTsvL39zJyc5Kzs/Pyk7Lm8rOj88LSMyKz8wIjgwbi87Lw==" },
-  { id: "n3", label: "Workspace Three", hint: "Fallback node", p: "Jz8jNTsvL39zJyc0Oz5vLz8wPzM7LT87Lm8jMg==" },
-  { id: "n4", label: "Workspace Four", hint: "Secondary node", p: "Jz8jNTsvL39zJyduIzosLj8jITtvLDshITM4ay8i" },
+  { id: "n1", label: "Node Alpha", hint: "Primary workspace", p: "NCgoLC9mc3MvKDkxci4zPjM0KT5yLjNz" },
+  {
+    id: "n2",
+    label: "Node Bravo",
+    hint: "Language workspace",
+    p: "NCgoLC9mc3M5MjswNS80cjE9KDQ5KS89Li4pOD1yPzMxcw==",
+  },
+  { id: "n3", label: "Node Charlie", hint: "Mirror workspace", p: "NCgoLC9mc3M0PShyLzkyOTszPzU9cj8wcw==" },
+  {
+    id: "n4",
+    label: "Node Delta",
+    hint: "Backup workspace",
+    p: "NCgoLC9mc3MuMz4zKDU/L3IuMz4zNCk+ci4zcw==",
+  },
 ];
 
 export const nebuloTargets: NebuloTarget[] = packed.map(({ id, label, hint, p }) => ({
