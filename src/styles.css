@@ -142,3 +142,327 @@
     color: var(--color-foreground);
   }
 }
+
+/* ---------------- Lopsided desktop system ---------------- */
+
+:root {
+  --glass: color-mix(in oklab, white 72%, transparent);
+  --glass-strong: color-mix(in oklab, white 86%, transparent);
+  --glass-line: color-mix(in oklab, black 12%, transparent);
+  --glass-blur: 22px;
+  --glass-sat: 160%;
+  --win-radius: 12px;
+  --ctl-radius: 8px;
+  --win-shadow: 0 24px 60px -18px rgb(0 0 0 / 0.45), 0 2px 8px rgb(0 0 0 / 0.18);
+  --ease-os: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.dark {
+  --glass: color-mix(in oklab, #10131a 62%, transparent);
+  --glass-strong: color-mix(in oklab, #10131a 80%, transparent);
+  --glass-line: color-mix(in oklab, white 14%, transparent);
+}
+
+[data-skin="sequoia"] {
+  --glass-blur: 34px;
+  --glass-sat: 180%;
+  --win-radius: 18px;
+  --ctl-radius: 12px;
+  --win-shadow: 0 34px 80px -22px rgb(0 0 0 / 0.5), 0 2px 10px rgb(0 0 0 / 0.16);
+}
+
+[data-skin="tahoe"] {
+  --glass: color-mix(in oklab, white 42%, transparent);
+  --glass-strong: color-mix(in oklab, white 58%, transparent);
+  --glass-blur: 44px;
+  --glass-sat: 200%;
+  --win-radius: 26px;
+  --ctl-radius: 999px;
+  --win-shadow: 0 40px 90px -24px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+
+[data-skin="tahoe"].dark {
+  --glass: color-mix(in oklab, #0d1017 44%, transparent);
+  --glass-strong: color-mix(in oklab, #0d1017 62%, transparent);
+}
+
+.desktop {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  transition: background-image 0.6s var(--ease-os);
+}
+
+.menubar {
+  position: relative;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 13px;
+  color: var(--color-foreground);
+  background: var(--glass);
+  border-bottom: 1px solid var(--glass-line);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+
+.menu-item {
+  padding: 2px 9px;
+  border-radius: var(--ctl-radius);
+  transition: background-color 0.18s var(--ease-os);
+}
+.menu-item:hover {
+  background: color-mix(in oklab, var(--color-foreground) 12%, transparent);
+}
+
+.win-shell {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--color-foreground);
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--win-radius);
+  box-shadow: var(--win-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  transition:
+    opacity 0.28s var(--ease-os),
+    transform 0.28s var(--ease-os),
+    border-radius 0.4s var(--ease-os),
+    box-shadow 0.3s var(--ease-os);
+}
+.win-shell[data-state="enter"] {
+  opacity: 0;
+  transform: scale(0.94) translateY(12px);
+}
+.win-shell[data-state="open"] {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.win-shell[data-state="away"] {
+  opacity: 0;
+  transform: scale(0.82) translateY(60px);
+  pointer-events: none;
+}
+.win-shell[data-active="false"] {
+  box-shadow: 0 12px 34px -16px rgb(0 0 0 / 0.4);
+}
+
+.win-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  cursor: grab;
+  border-bottom: 1px solid var(--glass-line);
+  background: color-mix(in oklab, var(--color-foreground) 4%, transparent);
+}
+.win-bar:active {
+  cursor: grabbing;
+}
+.win-title {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.traffic {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  transition: transform 0.15s var(--ease-os), filter 0.15s var(--ease-os);
+}
+.traffic:hover {
+  transform: scale(1.15);
+  filter: brightness(1.12);
+}
+.traffic-close { background: #ff5f57; }
+.traffic-min { background: #febc2e; }
+.traffic-hide { background: #28c840; }
+
+.win-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.win-grip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+}
+
+.dock-wrap {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.dock {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 10px;
+  pointer-events: auto;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: calc(var(--win-radius) + 6px);
+  box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+.dock-item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  font-size: 24px;
+  border-radius: var(--ctl-radius);
+  background: color-mix(in oklab, var(--color-foreground) 8%, transparent);
+  transition: transform 0.22s var(--ease-os), background-color 0.22s var(--ease-os);
+}
+.dock-item:hover {
+  transform: translateY(-10px) scale(1.16);
+}
+.dock-label {
+  position: absolute;
+  bottom: 56px;
+  padding: 3px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  color: var(--color-foreground);
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-line);
+  transition: opacity 0.18s var(--ease-os);
+}
+.dock-item:hover .dock-label {
+  opacity: 1;
+}
+.dock-dot {
+  position: absolute;
+  bottom: -5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.dock-sep {
+  width: 1px;
+  height: 40px;
+  background: var(--glass-line);
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  text-align: left;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--ctl-radius);
+  background: color-mix(in oklab, var(--color-foreground) 5%, transparent);
+  transition: transform 0.18s var(--ease-os), background-color 0.18s var(--ease-os);
+}
+.tile:hover {
+  transform: translateY(-2px);
+  background: color-mix(in oklab, var(--color-foreground) 10%, transparent);
+}
+.tile[data-selected="true"] {
+  outline: 2px solid color-mix(in oklab, var(--color-foreground) 55%, transparent);
+}
+.tile-badge {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: color-mix(in oklab, var(--color-foreground) 14%, transparent);
+}
+
+.section-title {
+  margin-bottom: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+.pill {
+  padding: 5px 12px;
+  font-size: 12px;
+  border-radius: var(--ctl-radius);
+  border: 1px solid var(--glass-line);
+  background: color-mix(in oklab, var(--color-foreground) 6%, transparent);
+  color: inherit;
+}
+
+.wall-swatch {
+  position: relative;
+  height: 84px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--ctl-radius);
+  border: 1px solid var(--glass-line);
+  transition: transform 0.2s var(--ease-os);
+}
+.wall-swatch:hover { transform: scale(1.02); }
+.wall-swatch[data-selected="true"] {
+  outline: 2px solid color-mix(in oklab, var(--color-foreground) 60%, transparent);
+}
+.wall-swatch span {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
+  color: #fff;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.42);
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 10px;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--ctl-radius);
+  background: color-mix(in oklab, var(--color-foreground) 5%, transparent);
+  transition: transform 0.2s var(--ease-os), background-color 0.2s var(--ease-os);
+}
+.game-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: color-mix(in oklab, var(--color-foreground) 11%, transparent);
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  font-size: 26px;
+  font-weight: 700;
+  border-radius: 18px;
+  color: #fff;
+  background: linear-gradient(145deg, #ff7a59, #b14bff);
+  box-shadow: 0 12px 30px -12px rgb(0 0 0 / 0.6);
+}
