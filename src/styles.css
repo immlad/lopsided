@@ -137,9 +137,21 @@
     border-color: var(--color-border);
   }
 
+  html,
+  body {
+    font-family: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 }
 
