@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  plugins: [react()],
-  base: '/lopsided/',   // REQUIRED for GitHub Pages
+  plugins: [react(), tsconfigPaths()],
+  base: '/lopsided/',
   build: {
     outDir: 'dist'
   }
