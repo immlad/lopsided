@@ -28,6 +28,9 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build static site into dist/
+        # Project site is served from https://<user>.github.io/<repo>/
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
         run: bun run build:pages
 
       - uses: actions/configure-pages@v5
