@@ -22,14 +22,14 @@ const packed = [
   { id: "n1", label: "Node Alpha", hint: "Primary workspace", p: "NCgoLC9mc3MvKDkxci4zPjM0KT5yLjNz" },
   {
     id: "n2",
-    label: "Node Bravo",
+    label: "Link 1",
     hint: "Language workspace",
     p: "NCgoLC9mc3M5MjswNS80cjE9KDQ5KS89Li4pOD1yPzMxcw==",
   },
   { id: "n3", label: "Node Charlie", hint: "Mirror workspace", p: "NCgoLC9mc3M0PShyLzkyOTszPzU9cj8wcw==" },
   {
     id: "n4",
-    label: "Node Delta",
+    label: "Link 2",
     hint: "Backup workspace",
     p: "NCgoLC9mc3MuMz4zKDU/L3IuMz4zNCk+ci4zcw==",
   },
