@@ -5,7 +5,7 @@ import { Desktop } from "@/components/desktop/Desktop";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lopsided — Unblocked Games Desktop" },
+      { title: "" },
       {
         name: "description",
         content:
