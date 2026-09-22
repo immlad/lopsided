@@ -1,6 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import { nebuloTargets } from "@/lib/desktop/nebulo-links";
 
+function openInBlank(id: string) {
+  const target = nebuloTargets.find((t) => t.id === id);
+  if (!target) return;
+  const value = target.resolve();
+  const tab = window.open("about:blank", "_blank");
+  if (!tab) return;
+  const doc = tab.document;
+  doc.title = "Home";
+  const style = doc.createElement("style");
+  style.textContent =
+    "html,body{margin:0;height:100%;overflow:hidden;background:#000}iframe{border:0;width:100%;height:100%;display:block}";
+  doc.head.appendChild(style);
+  const link = doc.createElement("link");
+  link.rel = "icon";
+  link.href = "data:,";
+  doc.head.appendChild(link);
+  const frame = doc.createElement("iframe");
+  frame.setAttribute("allowfullscreen", "true");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (frame as any).src = value;
+  doc.body.appendChild(frame);
+}
+
 export function NebuloApp({ initial }: { initial?: string }) {
   const [targetId, setTargetId] = useState<string | null>(initial ?? null);
   const [loading, setLoading] = useState(false);
@@ -31,13 +54,22 @@ export function NebuloApp({ initial }: { initial?: string }) {
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {nebuloTargets.map((t) => (
-            <button key={t.id} className="tile" onClick={() => setTargetId(t.id)}>
-              <span className="tile-badge">{t.label.slice(-1)}</span>
-              <span className="flex flex-col items-start">
-                <span className="font-medium">{t.label}</span>
-                <span className="text-xs opacity-60">{t.hint}</span>
-              </span>
-            </button>
+            <div key={t.id} className="flex items-center gap-2">
+              <button className="tile flex-1" onClick={() => setTargetId(t.id)}>
+                <span className="tile-badge">{t.label.slice(-1)}</span>
+                <span className="flex flex-col items-start">
+                  <span className="font-medium">{t.label}</span>
+                  <span className="text-xs opacity-60">{t.hint}</span>
+                </span>
+              </button>
+              <button
+                className="pill"
+                title="Open in a blank tab"
+                onClick={() => openInBlank(t.id)}
+              >
+                Blank tab
+              </button>
+            </div>
           ))}
         </div>
       </div>
