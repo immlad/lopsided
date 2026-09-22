@@ -91,6 +91,9 @@ export function NebuloApp({ initial }: { initial?: string }) {
             </option>
           ))}
         </select>
+        <button className="pill" onClick={() => openInBlank(targetId)}>
+          Blank tab
+        </button>
         <button
           className="pill"
           onClick={() => {
