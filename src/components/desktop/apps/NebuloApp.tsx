@@ -18,6 +18,10 @@ function openInBlank(id: string) {
   link.href = "data:,";
   doc.head.appendChild(link);
   const frame = doc.createElement("iframe");
+  tab.addEventListener("beforeunload", (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  });
   frame.setAttribute("allowfullscreen", "true");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (frame as any).src = value;
