@@ -101,22 +101,15 @@ export function NebuloApp({ initial }: { initial?: string }) {
             </option>
           ))}
         </select>
-        <button className="pill" onClick={() => openInBlank(targetId)}>
-          Blank tab
-        </button>
         <button
           className="pill"
-          onClick={() => {
-            const f = frameRef.current;
-            if (f) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const s = (f as any).src;
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (f as any).src = s;
-            }
-          }}
+          title="Open in a new about:blank tab"
+          onClick={() => openInBlank(targetId)}
         >
-          Reload
+          New tab
+        </button>
+        <button className="pill" onClick={() => setNonce((n) => n + 1)} disabled={loading}>
+          {loading ? "Reloading…" : "Reload"}
         </button>
         <span className="ml-auto text-xs opacity-60">{loading ? "Connecting…" : "Connected"}</span>
       </div>
