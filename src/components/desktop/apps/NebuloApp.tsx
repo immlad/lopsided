@@ -74,10 +74,10 @@ export function NebuloApp({ initial }: { initial?: string }) {
               </button>
               <button
                 className="pill"
-                title="Open in a blank tab"
+                title="Open in a new about:blank tab"
                 onClick={() => openInBlank(t.id)}
               >
-                Blank tab
+                New tab
               </button>
             </div>
           ))}
