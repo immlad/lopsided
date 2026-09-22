@@ -23,6 +23,16 @@ export function Desktop() {
     openWindow({ appId: "games", title: "Arcade", singleton: true });
   }, [openWindow]);
 
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, []);
+
   return (
     <div className="desktop" style={{ backgroundImage: wall.value }}>
       <MenuBar />
